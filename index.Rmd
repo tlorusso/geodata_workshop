@@ -5,15 +5,14 @@ output: html_notebook
 
 ## sf : the tidy way of working with spatial data in R
 
-The sf package is the (relatively) new kid on the block when it comes to working with spatial data in R. 
-
-It provides a much more intuitive way and is easier to learn that the sp package. It provides a syntax and data-structures which are coherent with the tidyverse. 
+The sf package is the (relatively) new kid on the block when it comes to working with spatial data in R. It provides a much more intuitive way and is easier to learn that the sp package. It provides a syntax and data-structures which are coherent with the tidyverse. A quick introduction can be found here: https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/05-Spatial-Data-In-R-sf
 
 ## Plotting a map the old way
 
-After reading in the shapefile you need to fortify it to be able to join the values which should be used to colour the map to it and plot it. Also the 'mapdata' dataset is created with the sole purpouse of generating the map -> it contains a row for every point which composes the polygons and to each point the value for the municipality mapped. 
-```{r,message=F}
+After reading in the shapefile you need to fortify it to be able to join the values which should be used to colour the map to it and plot it. Also the 'mapdata' dataset is created with the sole purpouse of generating the map : it contains a row for every edge-point which composes the polygons and to each point the value for the municipality mapped. 
 
+
+```{r load data, echo=T,eval=T}
 library(pacman)
 pacman::p_load(rgdal,ggplot2)
 
@@ -37,10 +36,10 @@ mapdata <- mapdata[order(mapdata$order),]
 mapdata[11300:11310,]
 
 # ggplot mapping  # data layer
-m0 <- ggplot(data=mapdata) + 
-  geom_path(aes(x=long, y=lat, group=group), color='gray') + 
+ggplot(data=mapdata,aes(x=long, y=lat, group=group)) + 
+  geom_path(color='gray') + 
   coord_equal()+ 
-  geom_polygon(aes(x=long, y=lat, group=group, fill=Anteil_GA),color = "white")+
+  geom_polygon(aes(fill=Anteil_GA),color = "white")+
   theme_void()+  
   theme(legend.key.size = unit(1,"line"),                                       
   #Grösse Legende
@@ -49,15 +48,11 @@ m0 <- ggplot(data=mapdata) +
   labs(title="GA-Dichte im Kanton Zürich",
        subtitle="Anzahl Generalabonnemente pro 100 Einwohner",x="",y="")
 
-m0
-
 ```
-
 
 ## Plotting maps the 'tidy' way with the sf-package
 
-```{r}
-
+```{r,eval=T}
 library(pacman)
 
 pacman::p_load(sp, sf,tidyverse,gghighlight)
@@ -93,15 +88,18 @@ sfmap
 ```
 
 ## sf dataframes: just a data.frame with a special geo-variable! We can use it like an ordinary structured dataframe.
-```{r}
+
+```{r,eval=T}
 library(gghighlight)
+#library(devtools)
+#install_github(statistikZH/statR)
+library(statR)
 
 gghighlight_point(gemdata, aes(mfzpro100ew,Anteil_GA),Anteil_GA > 7 & mfzpro100ew<600 | 
                     mfzpro100ew>1000|
                     mfzpro100ew<700 & Anteil_GA<3|
                     mfzpro100ew>750 & Anteil_GA>9)+
   geom_point(aes(size=Anzahl_Einw/1000, color=Anteil_HTA))+
- # geom_smooth(method="loess", se=F)+
   theme_stat()+
   scale_size(name="Einwohner")+
   labs(title="Motorisierungsgrad & Generalabonnements pro Gemeinde\n",
@@ -112,25 +110,25 @@ gghighlight_point(gemdata, aes(mfzpro100ew,Anteil_GA),Anteil_GA > 7 & mfzpro100e
 ## This was just a foretaste...
 
 Imagine we have several shapefiles which we want to plot layer by layer. With the old way we would need to fortify each shapefile...
-```{r}
 
-handlungsraum<- read_sf("geodata/handlungsraeume", stringsAsFactors = FALSE) 
+```{r,eval=T}
+# Shapefiles of the "Handlungsräume & Bauzonen"
+handlungsraum<- st_read("geodata/handlungsraeume", stringsAsFactors = FALSE) 
 
-bauzonen <- read_sf("geodata/bauzonen", stringsAsFactors = FALSE) 
+bauzonen <- st_read("geodata/bauzonen", stringsAsFactors = FALSE) 
 
 sfmap+
   geom_sf(data=handlungsraum,fill=NA)+
   geom_sf(data=bauzonen,alpha=0.5)+
   coord_sf(datum = NA)  
-
 ```
 
 
 ## geospatial operations: join etc!
-```{r}
+```{r,eval=T}
 
-#CRS CH LV95 -> swiss projection
-st_crs(gemeinden)<- "+init=epsg:2056"
+# #CRS CH LV95 -> swiss projection
+# st_crs(gemeinden)<- "+init=epsg:2056"
 
 #Projektion wgs 84 lat lng
 # sbb <- st_transform(sbb,"+init=epsg:4326 +proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +units=m +no_defs")
