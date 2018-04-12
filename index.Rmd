@@ -3,6 +3,7 @@ title: "A brief introduction to the sf package"
 output: html_notebook
 ---
 
+
 ## sf : the tidy way of working with spatial data in R
 
 The sf package is the (relatively) new kid on the block when it comes to working with spatial data in R. It provides a much more intuitive way and is easier to learn that the sp package. It provides a syntax and data-structures which are coherent with the tidyverse. A quick introduction can be found here: https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/05-Spatial-Data-In-R-sf
@@ -12,7 +13,8 @@ The sf package is the (relatively) new kid on the block when it comes to working
 After reading in the shapefile you need to fortify it to be able to join the values which should be used to colour the map to it and plot it. Also the 'mapdata' dataset is created with the sole purpouse of generating the map : it contains a row for every edge-point which composes the polygons and to each point the value for the municipality mapped. 
 
 
-```{r load data, echo=T,eval=T}
+```{r,echo=TRUE,message = TRUE,warnings=F,cache=F}
+
 library(pacman)
 pacman::p_load(rgdal,ggplot2)
 
@@ -35,7 +37,12 @@ mapdata <- mapdata[order(mapdata$order),]
 #how does the df look like?
 mapdata[11300:11310,]
 
+```
+
+```{r,echo=TRUE,message = F,warnings=F,cache=F}
+
 # ggplot mapping  # data layer
+
 ggplot(data=mapdata,aes(x=long, y=lat, group=group)) + 
   geom_path(color='gray') + 
   coord_equal()+ 
@@ -52,7 +59,8 @@ ggplot(data=mapdata,aes(x=long, y=lat, group=group)) +
 
 ## Plotting maps the 'tidy' way with the sf-package
 
-```{r,eval=T}
+```{r,echo=TRUE,message = F,warnings=F,cache=F}
+
 library(pacman)
 
 pacman::p_load(sp, sf,tidyverse,gghighlight)
@@ -89,7 +97,7 @@ sfmap
 
 ## sf dataframes: just a data.frame with a special geo-variable! We can use it like an ordinary structured dataframe.
 
-```{r,eval=T}
+```{r,echo=TRUE,message = F,warnings=F,cache=F}
 library(gghighlight)
 #library(devtools)
 #install_github(statistikZH/statR)
@@ -111,7 +119,7 @@ gghighlight_point(gemdata, aes(mfzpro100ew,Anteil_GA),Anteil_GA > 7 & mfzpro100e
 
 Imagine we have several shapefiles which we want to plot layer by layer. With the old way we would need to fortify each shapefile...
 
-```{r,eval=T}
+```{r, eval=TRUE,include=TRUE}
 # Shapefiles of the "Handlungsräume & Bauzonen"
 handlungsraum<- st_read("geodata/handlungsraeume", stringsAsFactors = FALSE) 
 
@@ -125,7 +133,7 @@ sfmap+
 
 
 ## geospatial operations: join etc!
-```{r,eval=T}
+```{r,eval=TRUE,include=TRUE}
 
 # #CRS CH LV95 -> swiss projection
 # st_crs(gemeinden)<- "+init=epsg:2056"
