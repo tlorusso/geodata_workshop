@@ -4,7 +4,7 @@ output: html_notebook
 ---
 
 
-## sf : the tidy way of working with spatial data in R
+## sf : the tidy & easy way of working with spatial data in R
 
 The sf package is the (relatively) new kid on the block when it comes to working with spatial data in R. It provides a much more intuitive way and is easier to learn that the sp package. It provides a syntax and data-structures which are coherent with the tidyverse. A quick introduction can be found here: https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/05-Spatial-Data-In-R-sf
 
@@ -16,7 +16,9 @@ After reading in the shapefile you need to fortify it to be able to join the val
 ```{r,echo=TRUE,message = TRUE,warnings=F,cache=F}
 
 library(pacman)
-pacman::p_load(rgdal,ggplot2)
+pacman::p_load(rgdal,tidyverse)
+
+gpclibPermit()
 
 #read shapefile with rgdal (in past i've regularly used maptools::readShapePoly) this results in a nested datastructure (lists within lists) which is hard to decompose
 
@@ -127,7 +129,7 @@ bauzonen <- st_read("geodata/bauzonen", stringsAsFactors = FALSE)
 
 sfmap+
   geom_sf(data=handlungsraum,fill=NA)+
-  geom_sf(data=bauzonen,alpha=0.5)+
+  geom_sf(data=bauzonen,alpha=0.5,color="white")+
   coord_sf(datum = NA)  
 ```
 
