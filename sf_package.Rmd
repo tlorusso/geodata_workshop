@@ -1,14 +1,20 @@
 ---
 title: "A brief introduction to the sf package"
-output: html_notebook
-toc: true
+output: 
+  html_document:
+    toc: true # table of content true
+    toc_depth: 3  # upto three depths of headings (specified by #, ## and ###)
+    number_sections: true  ## if you want number sections at each table header
+    theme: united  # many options for theme, this one is my favorite.
+    highlight: tango
 ---
 
 ## sf : the simple & tidy way of working with spatial data in R
 
-The sf package is the (relatively) new kid on the block when it comes to working with spatial data in R. It provides a much more intuitive way and is easier to learn that the sp package. It provides a syntax and data-structures which are coherent with the tidyverse. A quick introduction can be found here: https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/05-Spatial-Data-In-R-sf
+The sf package is the (relatively) new kid on the block when it comes to working with spatial data in R. It provides a much more intuitive way and is easier to learn that the sp package. It provides a syntax and data-structures which are coherent with the tidyverse. A quick introduction can be found here:
+https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/05-Spatial-Data-In-R-sf
 
-It builds upon 'simple features', a standard which is not R specific: https://en.wikipedia.org/wiki/Simple_Features
+It builds upon the 'simple features' standard (not R specific!) https://en.wikipedia.org/wiki/Simple_Features
 
 Documentation on CRAN:
 https://cran.r-project.org/web/packages/sf/sf.pdf
@@ -21,9 +27,12 @@ After reading in the shapefile you need to fortify it to be able to join the val
 ```{r,echo=TRUE,message = TRUE,warnings=F,cache=F}
 
 library(pacman)
-pacman::p_load(rgdal,tidyverse)
+pacman::p_load(rgdal, rgeos,ggplot2)
 
-gpclibPermit()
+
+#ggplot2 version?
+# devtools::install_github("tidyverse/ggplot2")
+# require(ggplot2)
 
 #read shapefile with rgdal (in past i've regularly used maptools::readShapePoly) this results in a nested datastructure (lists within lists) which is hard to decompose
 
@@ -70,7 +79,7 @@ ggplot(data=mapdata,aes(x=long, y=lat, group=group)) +
 
 library(pacman)
 
-pacman::p_load(sp, sf,tidyverse,gghighlight)
+pacman::p_load(sp,sf,dplyr,ggplot2)
 
 #Shapefile (municipalities) - read_sf generates a tidy dataset, each row represents one municipality, the polygons are stored in a single special geo-variable, the 'geometry' column
 gemeinden<- read_sf('geodata/Shape_detailliert_SEEN_2016', stringsAsFactors = FALSE)
@@ -99,7 +108,6 @@ sfmap <-ggplot()+
        subtitle="Anzahl Generalabonnemente pro 100 Einwohner",x="",y="")
 
 sfmap
-
 ```
 
 ## sf dataframes: just a data.frame with a special geo-variable! We can use it like an ordinary structured dataframe.
@@ -107,15 +115,15 @@ sfmap
 ```{r,echo=TRUE,message = F,warnings=F,cache=F}
 library(gghighlight)
 #library(devtools)
-#install_github(statistikZH/statR)
-library(statR)
+# devtools::install_github("statistikZH/statR")
+# library(statR)
 
 gghighlight_point(gemdata, aes(mfzpro100ew,Anteil_GA),Anteil_GA > 7 & mfzpro100ew<600 | 
                     mfzpro100ew>1000|
                     mfzpro100ew<700 & Anteil_GA<3|
                     mfzpro100ew>750 & Anteil_GA>9)+
   geom_point(aes(size=Anzahl_Einw/1000, color=Anteil_HTA))+
-  theme_stat()+
+  # theme_stat()+
   scale_size(name="Einwohner")+
   labs(title="Motorisierungsgrad & Generalabonnements pro Gemeinde\n",
        y="Anzahl GA pro 100 Einwohner",x="Motorfahrzeuge pro 1000 Einwohner")
