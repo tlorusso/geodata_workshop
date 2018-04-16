@@ -1,13 +1,11 @@
 ---
 title: "A brief introduction to the sf package"
 output: 
-  html_document:
-    toc: true # table of content true
-    toc_float: true
-    toc_depth: 3  # upto three depths of headings (specified by #, ## and ###)
-    number_sections: true  ## if you want number sections at each table header
-    theme: united  # many options for theme, this one is my favorite.
-    highlight: tango
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+    toc: true 
+    number_sections: true 
     df_print: paged
 ---
 
@@ -23,7 +21,7 @@ https://cran.r-project.org/web/packages/sf/sf.pdf
 
 # Plotting a map : my workflow before using the sf-package
 
-After reading in the shapefile you need to fortify it to be able to join the values which should be used to colour the map to it and plot it. Also the 'mapdata' dataset is created with the sole purpouse of generating the map : it contains a row for every edge-point which composes the polygons and to each point the value for the municipality mapped. 
+After reading in the shapefile you need to fortify it to be able to join the values which should be used to colour the map to it and plot it. The `mapdata` dataset in the example below is created with the **sole purpouse** of generating a map. It contains a row for every edge-point which composes the polygons. Each point-entry contains the value for the respective municipality. That's a lot of redundancy for a single-use object...
 
 ```{r,echo=TRUE,message = TRUE,warnings=F}
 
@@ -32,7 +30,7 @@ pacman::p_load(rgdal, rgeos)
 # devtools::install_github("tidyverse/ggplot2")
 library(ggplot2)
 
-#read shapefile with rgdal (in past i've regularly used maptools::readShapePoly) this results in a nested datastructure (lists within lists) which is hard to decompose
+#read shapefile with rgdal (in past i've regularly used maptools::readShapePoly). This results in a Spatial*Dataframe, a nested datastructure (lists within lists) which is hard to decompose.
 
 shape <- readOGR("geodata/Shape_detailliert_SEEN_2016/UP_GEMEINDEN_SEEN_2016_F.shp")
 
@@ -111,7 +109,7 @@ sfmap
 
 # sf objects are just ordinary dataframes!
 
-Dataframes with class 'sf' are ordinary dataframes with a special column containing the geo-variable. It can be handeld like any ordinary structured dataframe.
+Dataframes with class 'sf' are ordinary dataframes with a special column containing the geo-variable. They can be handled like any ordinary structured dataframe.
 
 ```{r,echo=TRUE,message = F,warnings=F,cache=F}
 library(gghighlight)
@@ -133,7 +131,7 @@ gghighlight_point(gemdata, aes(mfzpro100ew,Anteil_GA),Anteil_GA > 7 & mfzpro100e
 
 # This was just a foretaste...
 
-Imagine we have several shapefiles which we want to plot layer by layer. With the old way we would need to fortify each shapefile...
+Imagine we have several shapefiles which we want to plot layer by layer. Without sf we would need to fortify each shapefile to be able to make a ggplot2-map with it.
 
 ```{r, eval=TRUE,include=TRUE}
 # Shapefiles of the "Handlungsräume & Bauzonen"
