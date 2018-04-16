@@ -3,10 +3,12 @@ title: "A brief introduction to the sf package"
 output: 
   html_document:
     toc: true # table of content true
+    toc_float: true
     toc_depth: 3  # upto three depths of headings (specified by #, ## and ###)
     number_sections: true  ## if you want number sections at each table header
     theme: united  # many options for theme, this one is my favorite.
     highlight: tango
+    df_print: paged
 ---
 
 ## sf : the simple & tidy way of working with spatial data in R
