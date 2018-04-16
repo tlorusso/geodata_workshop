@@ -2,7 +2,7 @@
 title: "Visualizing GeoData with R"
 subtitle: "Introduction to sf & tmap"
 author: "Thomas Lo Russo & Max Grütter"
-date: "2016/12/12"
+date: "2018/18/04"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -13,8 +13,10 @@ output:
 ---
 class: center, middle
 
-1. Simple Features - 
-2. Tmap
+1. **Simple Features** - the simple way of working with geodata in R
+
+2. **Tmap** - beautiful static & interactive thematic maps
+
 ---
 class: middle
 
@@ -22,22 +24,29 @@ class: middle
 
 **Simple feature** access is a standard for **accessing and exchanging** spatial data (points, lines, polygons) as well as for operations defined on them that has been adopted widely over the past ten years, not only by spatial databases such as PostGIS, but also more recent standards such as GeoJSON.
 
-https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran
-
 https://en.wikipedia.org/wiki/Simple_Features
 
-Not R-specific!
-
 Implemented in R in the **sf-package**
+
+https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran
 
 http://r-spatial.github.io/sf/
 
 ---
 class: inverse, center, middle
 
-# Why should i use sf instead of sp?
+# Should i use sf instead of sp?
+
+The recent development of the sf package has modernized the implementation of spatial data in R and made it possible to integrate spatial data into the tidyverse and ggplot2 plotting system. sf has made it easier to work with spatial data in R by **minimizing the distinction between spatial data and other forms of data** you might deal with in R. 
+
+However, there still remain uses for the sp package!
+
+For a detailed discussion:
+
+https://www.jessesadler.com/post/gis-with-r-intro/
 
 
+For now its not a 
 
 The sp package and supporting packages such as rgdal and rgeos predate this standard, which complicates exchange and handling of simple feature data.
 

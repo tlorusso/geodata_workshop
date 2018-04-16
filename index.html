@@ -23,14 +23,16 @@ class: center, middle, inverse, title-slide
 # Visualizing GeoData with R
 ## Introduction to sf &amp; tmap
 ### Thomas Lo Russo &amp; Max Grütter
-### 2016/12/12
+### 2018/18/04
 
 ---
 
 class: center, middle
 
-1. Simple Features - 
-2. Tmap
+1. **Simple Features** - the simple way of working with geodata in R
+
+2. **Tmap** - beautiful static &amp; interactive thematic maps
+
 ---
 class: middle
 
@@ -38,22 +40,29 @@ class: middle
 
 **Simple feature** access is a standard for **accessing and exchanging** spatial data (points, lines, polygons) as well as for operations defined on them that has been adopted widely over the past ten years, not only by spatial databases such as PostGIS, but also more recent standards such as GeoJSON.
 
-https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran
-
 https://en.wikipedia.org/wiki/Simple_Features
 
-Not R-specific!
-
 Implemented in R in the **sf-package**
+
+https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran
 
 http://r-spatial.github.io/sf/
 
 ---
 class: inverse, center, middle
 
-# Why should i use sf instead of sp?
+# Should i use sf instead of sp?
+
+The recent development of the sf package has modernized the implementation of spatial data in R and made it possible to integrate spatial data into the tidyverse and ggplot2 plotting system. sf has made it easier to work with spatial data in R by **minimizing the distinction between spatial data and other forms of data** you might deal with in R. 
+
+However, there still remain uses for the sp package!
+
+For a detailed discussion:
+
+https://www.jessesadler.com/post/gis-with-r-intro/
 
 
+For now its not a 
 
 The sp package and supporting packages such as rgdal and rgeos predate this standard, which complicates exchange and handling of simple feature data.
 
@@ -352,8 +361,8 @@ DT::datatable(
 )
 ```
 
-<div id="htmlwidget-78b17a020e0cc67cea9e" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-78b17a020e0cc67cea9e">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-6c4ce3e42edcb5e4bae8" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6c4ce3e42edcb5e4bae8">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 
