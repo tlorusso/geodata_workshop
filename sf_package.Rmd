@@ -11,7 +11,7 @@ output:
     df_print: paged
 ---
 
-## sf : the simple & tidy way of working with spatial data in R
+# sf : the simple & tidy way of working with spatial data in R
 
 The sf package is the (relatively) new kid on the block when it comes to working with spatial data in R. It provides a much more intuitive way and is easier to learn that the sp package. It provides a syntax and data-structures which are coherent with the tidyverse. A quick introduction can be found here:
 https://mhweber.github.io/gis_in_action_r_spatial/2017/04/18/05-Spatial-Data-In-R-sf
@@ -21,7 +21,7 @@ It builds upon the 'simple features' standard (not R specific!) https://en.wikip
 Documentation on CRAN:
 https://cran.r-project.org/web/packages/sf/sf.pdf
 
-## Plotting a map : my workflow before using the sf-package
+# Plotting a map : my workflow before using the sf-package
 
 After reading in the shapefile you need to fortify it to be able to join the values which should be used to colour the map to it and plot it. Also the 'mapdata' dataset is created with the sole purpouse of generating the map : it contains a row for every edge-point which composes the polygons and to each point the value for the municipality mapped. 
 
@@ -71,7 +71,7 @@ ggplot(data=mapdata,aes(x=long, y=lat, group=group)) +
 
 ```
 
-## Plotting maps the 'tidy' way with the sf-package
+# Plotting maps the 'tidy' way with the sf-package
 
 ```{r,echo=TRUE,message = F,warnings=F,include=TRUE}
 
@@ -109,7 +109,9 @@ sfmap
 
 ```
 
-## sf dataframes: just a data.frame with a special geo-variable! We can use it like an ordinary structured dataframe.
+# sf objects are just ordinary dataframes!
+
+Dataframes with class 'sf' are ordinary dataframes with a special column containing the geo-variable. It can be handeld like any ordinary structured dataframe.
 
 ```{r,echo=TRUE,message = F,warnings=F,cache=F}
 library(gghighlight)
@@ -117,10 +119,10 @@ library(gghighlight)
 # devtools::install_github("statistikZH/statR")
 # library(statR)
 
-gghighlight_point(gemdata, aes(mfzpro100ew,Anteil_GA),Anteil_GA > 7 & mfzpro100ew<600 | 
-                    mfzpro100ew>1000|
+
+gghighlight_point(gemdata, aes(mfzpro100ew,Anteil_GA),Anteil_GA > 7 & mfzpro100ew<600 |                     mfzpro100ew>1000|
                     mfzpro100ew<700 & Anteil_GA<3|
-                    mfzpro100ew>750 & Anteil_GA>9)+
+                    mfzpro100ew>750 & Anteil_GA>9,label_key = GEMEINDENA)+
   geom_point(aes(size=Anzahl_Einw/1000, color=Anteil_HTA))+
   # theme_stat()+
   scale_size(name="Einwohner")+
@@ -129,15 +131,15 @@ gghighlight_point(gemdata, aes(mfzpro100ew,Anteil_GA),Anteil_GA > 7 & mfzpro100e
 
 ```
 
-## This was just a foretaste...
+# This was just a foretaste...
 
 Imagine we have several shapefiles which we want to plot layer by layer. With the old way we would need to fortify each shapefile...
 
 ```{r, eval=TRUE,include=TRUE}
 # Shapefiles of the "Handlungsräume & Bauzonen"
-handlungsraum<- st_read("geodata/handlungsraeume", stringsAsFactors = FALSE) 
+handlungsraum<- st_read("geodata/handlungsraeume", stringsAsFactors = FALSE,quiet = TRUE) 
 
-bauzonen <- st_read("geodata/bauzonen", stringsAsFactors = FALSE) 
+bauzonen <- st_read("geodata/bauzonen", stringsAsFactors = FALSE,quiet = TRUE) 
 
 sfmap+
   geom_sf(data=handlungsraum,fill=NA)+
@@ -146,10 +148,10 @@ sfmap+
 ```
 
 
-## geospatial operations & transformations made easy with sf
+# geospatial operations & transformations made easy with sf
 ```{r,eval=TRUE,include=TRUE}
 
-# Example: Transforming projection & coordinate system
+#Example: Transforming projection & coordinate system
 gemdata %>% 
   select(GEMEINDENA) %>%
 st_transform(crs = "+proj=moll +datum=WGS84") %>% 
@@ -164,27 +166,5 @@ gemdata %>%
   st_buffer(dist=100) %>% 
   plot()
 
-# Rotate centroids
-
-# 
-# rot = function(a) matrix(c(cos(a), sin(a), -sin(a), cos(a)), 2, 2)
-# 
-# ncg = st_geometry(gemdata)
-# 
-# plot(ncg, border = 'grey')
-# 
-# cntrd = st_centroid(ncg)
-# 
-# ## Warning in st_centroid.sfc(ncg): st_centroid does not give correct
-# ## centroids for longitude/latitude data
-# ncg2 = (ncg - cntrd) * rot(pi/2) * .75 + cntrd
-# plot(ncg2, add = TRUE)
-# 
-# 
-# plot(cntrd, col = 'red', add = TRUE, cex = .5)
-
-
-
 ```
-
 

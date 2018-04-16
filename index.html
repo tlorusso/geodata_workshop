@@ -34,7 +34,7 @@ class: center, middle
 2. **Tmap** - beautiful static &amp; interactive thematic maps
 
 ---
-class: middle
+class: middle, inverse
 
 # Simple Features
 
@@ -49,7 +49,20 @@ https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran
 http://r-spatial.github.io/sf/
 
 ---
-class: inverse, center, middle
+class: middle
+
+# sf-package
+
+1. Reading Writing and Converting Simple Features to/from various Formats
+
+2. Manipulating Simple Features and its Geometries
+
+3. Plotting Simple Features
+
+https://tlorusso.github.io/sf_intro/sf_package
+
+---
+class: middle
 
 # Should i use sf instead of sp?
 
@@ -61,20 +74,9 @@ For a detailed discussion:
 
 https://www.jessesadler.com/post/gis-with-r-intro/
 
-
-For now its not a 
-
-The sp package and supporting packages such as rgdal and rgeos predate this standard, which complicates exchange and handling of simple feature data.
-
-Instead of S4 classes used by the sp family, it extends R’s data.frame directly, adding a list-column for geometries. This makes it easier to manipulate them with other tools that assume all data objects are data.frames, such as dplyr and tidyverse.
-
-advantages of sf over the sp family include: simpler handling of coordinate reference systems (using either EPSG code or PROJ.4 string), the ability to return distance or area values with proper units (meter, feet or US feet), and support for geosphere functions to compute distances or areas for longitude/latitude data, using datum-dependent values for the Earth’s radius and flattening.
- 
-
-
 ---
 
-# Hello World
+# tmap - thematic Maps in R
 
 Install the **xaringan** package from [Github](https://github.com/yihui/xaringan):
 
@@ -361,8 +363,8 @@ DT::datatable(
 )
 ```
 
-<div id="htmlwidget-6c4ce3e42edcb5e4bae8" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-6c4ce3e42edcb5e4bae8">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-454a86895d3c4fed83de" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-454a86895d3c4fed83de">{"x":{"filter":"none","fillContainer":false,"data":[["1","2","3","4","5","6","7","8","9","10"],[5.1,4.9,4.7,4.6,5,5.4,4.6,5,4.4,4.9],[3.5,3,3.2,3.1,3.6,3.9,3.4,3.4,2.9,3.1],[1.4,1.4,1.3,1.5,1.4,1.7,1.4,1.5,1.4,1.5],[0.2,0.2,0.2,0.2,0.2,0.4,0.3,0.2,0.2,0.1],["setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa","setosa"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Sepal.Length<\/th>\n      <th>Sepal.Width<\/th>\n      <th>Petal.Length<\/th>\n      <th>Petal.Width<\/th>\n      <th>Species<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":8,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[8,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 
 ---
 

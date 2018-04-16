@@ -18,7 +18,7 @@ class: center, middle
 2. **Tmap** - beautiful static & interactive thematic maps
 
 ---
-class: middle
+class: middle, inverse
 
 # Simple Features
 
@@ -33,7 +33,20 @@ https://www.r-consortium.org/blog/2017/01/03/simple-features-now-on-cran
 http://r-spatial.github.io/sf/
 
 ---
-class: inverse, center, middle
+class: middle
+
+# sf-package
+
+1. Reading Writing and Converting Simple Features to/from various Formats
+
+2. Manipulating Simple Features and its Geometries
+
+3. Plotting Simple Features
+
+https://tlorusso.github.io/sf_intro/sf_package
+
+---
+class: middle
 
 # Should i use sf instead of sp?
 
@@ -45,20 +58,9 @@ For a detailed discussion:
 
 https://www.jessesadler.com/post/gis-with-r-intro/
 
-
-For now its not a 
-
-The sp package and supporting packages such as rgdal and rgeos predate this standard, which complicates exchange and handling of simple feature data.
-
-Instead of S4 classes used by the sp family, it extends R’s data.frame directly, adding a list-column for geometries. This makes it easier to manipulate them with other tools that assume all data objects are data.frames, such as dplyr and tidyverse.
-
-advantages of sf over the sp family include: simpler handling of coordinate reference systems (using either EPSG code or PROJ.4 string), the ability to return distance or area values with proper units (meter, feet or US feet), and support for geosphere functions to compute distances or areas for longitude/latitude data, using datum-dependent values for the Earth’s radius and flattening.
- 
-
-
 ---
 
-# Hello World
+# tmap - thematic Maps in R
 
 Install the **xaringan** package from [Github](https://github.com/yihui/xaringan):
 
