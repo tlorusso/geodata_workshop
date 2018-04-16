@@ -19,20 +19,16 @@ It builds upon the 'simple features' standard (not R specific!) https://en.wikip
 Documentation on CRAN:
 https://cran.r-project.org/web/packages/sf/sf.pdf
 
-## Plotting a map the old way
+## Plotting a map : my workflow before using the sf-package
 
 After reading in the shapefile you need to fortify it to be able to join the values which should be used to colour the map to it and plot it. Also the 'mapdata' dataset is created with the sole purpouse of generating the map : it contains a row for every edge-point which composes the polygons and to each point the value for the municipality mapped. 
 
-
-```{r,echo=TRUE,message = TRUE,warnings=F,cache=F}
+```{r,echo=TRUE,message = TRUE,warnings=F}
 
 library(pacman)
-pacman::p_load(rgdal, rgeos,ggplot2)
-
-
-#ggplot2 version?
+pacman::p_load(rgdal, rgeos)
 # devtools::install_github("tidyverse/ggplot2")
-# require(ggplot2)
+library(ggplot2)
 
 #read shapefile with rgdal (in past i've regularly used maptools::readShapePoly) this results in a nested datastructure (lists within lists) which is hard to decompose
 
@@ -55,7 +51,7 @@ mapdata[11300:11310,]
 
 ```
 
-```{r,echo=TRUE,message = F,warnings=F,cache=F}
+```{r,echo=TRUE,message = F,warnings=F}
 
 # ggplot mapping  # data layer
 
@@ -75,14 +71,14 @@ ggplot(data=mapdata,aes(x=long, y=lat, group=group)) +
 
 ## Plotting maps the 'tidy' way with the sf-package
 
-```{r,echo=TRUE,message = F,warnings=F,cache=F}
+```{r,echo=TRUE,message = F,warnings=F,include=TRUE}
 
 library(pacman)
 
-pacman::p_load(sp,sf,dplyr,ggplot2)
+pacman::p_load(sf,dplyr,ggplot2)
 
 #Shapefile (municipalities) - read_sf generates a tidy dataset, each row represents one municipality, the polygons are stored in a single special geo-variable, the 'geometry' column
-gemeinden<- read_sf('geodata/Shape_detailliert_SEEN_2016', stringsAsFactors = FALSE)
+gemeinden<- st_read('geodata/Shape_detailliert_SEEN_2016')
 
 # Dataset (Motorization and GA-owners)
 mfz_ga <-readRDS("mfz_ga.rds")
@@ -108,6 +104,7 @@ sfmap <-ggplot()+
        subtitle="Anzahl Generalabonnemente pro 100 Einwohner",x="",y="")
 
 sfmap
+
 ```
 
 ## sf dataframes: just a data.frame with a special geo-variable! We can use it like an ordinary structured dataframe.
