@@ -303,7 +303,7 @@ tm_shape(ZHcarto) + tm_fill("med_preis", style="jenks") +
 
 
 <!-- ```{sql connection=statop, output.var = "ha_geb"} -->
-<!--  select S_ID,    S_J_ERHJAHR,    BFS_AKT,    parznr, N_PREIS, CENTROID_X,    CENTROID_Y from HA_PROD.HA_HAUPTTAB_AS_MV a -->
+<!--  select S_ID,    S_J_ERHJAHR,    BFS_AKT,  BFS_ORIG  parznr, N_PREIS, CENTROID_X, CENTROID_Y from HA_PROD.HA_HAUPTTAB_AS_MV a -->
 <!--  join ( select BFSNR, gemeindefus_neu, COALESCE(gemeindefus_neu, BFSNR) AS BFS_neu, NUMMER, SHAPE_AREA, CENTROID_X, CENTROID_Y  from GEO.LIEGEN_GESAMT_TEMP_MV -->
 <!--      left join (select * from gemeindefus) -->
 <!--      on bfsnr = gemeindefus_alt) d -->
@@ -314,6 +314,61 @@ tm_shape(ZHcarto) + tm_fill("med_preis", style="jenks") +
 <!--      and S_J_ERHJAHR between 2007 and 2017      --(Einschränkung des Kaufjahres) -->
 <!-- ``` -->
 
+
+<!-- ```{sql connection=statop, output.var = "ha_geb"} -->
+<!-- select  -->
+<!--     S_ID, S_J_ERHJAHR, BFS_AKT, BFS_orig, c_artlieg, C_EFH, c_arthandae,N_PREIS, -->
+<!--     BFSNR, gemeindefus_neu, COALESCE(gemeindefus_neu, BFSNR) AS BFS_neu, parznr, SHAPE_AREA, CENTROID_X, CENTROID_Y  -->
+<!-- from  -->
+<!--     (  -->
+<!--     select  -->
+<!--         S_ID,    S_J_ERHJAHR,    BFS_AKT, BFS_orig, c_artlieg,  C_EFH, c_arthandae,  -->
+<!--         case  -->
+<!--             when bfs_orig=217 then 'EL'||parznr -->
+<!--             when bfs_orig=222 then 'HS'||parznr -->
+<!--             when bfs_orig=132 then 'HL'||parznr -->
+<!--             when bfs_orig=133 then 'HN'||parznr -->
+<!--             when bfs_orig=174 then 'IE'||parznr -->
+<!--             when bfs_orig=175 then 'KY'||parznr -->
+<!--             when bfs_orig=171 then 'BA'||parznr -->
+<!--             when bfs_orig=179 then 'ST'||parznr -->
+<!--             when bfs_orig=212 then 'BE'||parznr -->
+<!--             when bfs_orig=229 then 'WD'||parznr -->
+<!--         else parznr end as parznr,  -->
+<!--         N_PREIS from HA_PROD.HA_HAUPTTAB_AS_MV -->
+<!--     ) a -->
+<!-- join  -->
+<!--     ( -->
+<!--     select  -->
+<!--     BFSNR, gemeindefus_neu, COALESCE(gemeindefus_neu, BFSNR) AS BFS_neu, nummer, SHAPE_AREA, CENTROID_X, CENTROID_Y  -->
+<!--     from -->
+<!--         ( select BFSNR,     -->
+<!--         case  -->
+<!--         when BFSNR=217 then 'EL'||NUMMER -->
+<!--         when BFSNR=222 then 'HS'||NUMMER -->
+<!--         when BFSNR=132 then 'HL'||NUMMER -->
+<!--         when BFSNR=133 then 'HN'||NUMMER -->
+<!--         when BFSNR=174 then 'IE'||NUMMER -->
+<!--         when BFSNR=175 then 'KY'||NUMMER -->
+<!--         when BFSNR=171 then 'BA'||NUMMER -->
+<!--         when BFSNR=179 then 'ST'||NUMMER -->
+<!--         when BFSNR=212 then 'BE'||NUMMER -->
+<!--         when BFSNR=229 then 'WD'||NUMMER -->
+<!--         else NUMMER end as NUMMER, SHAPE_AREA, CENTROID_X, CENTROID_Y  from GEO.LIEGEN_GESAMT_TEMP_MV -->
+<!--         ) b1 -->
+<!--     left join  -->
+<!--         ( -->
+<!--         select * from gemeindefus -->
+<!--         ) b2 -->
+<!--     on b1.bfsnr = b2.gemeindefus_alt -->
+<!--     ) b -->
+<!-- on a.BFS_AKT = b.BFS_neu  -->
+<!-- AND a.parznr=b.nummer   -->
+<!-- where  a.c_artlieg = 7                           --(Wohngebäude)) -->
+<!-- and a.C_EFH = 1 -->
+<!-- and a.c_arthandae = 1                           --(Nur Kaufgeschäfte) -->
+<!-- and a.S_J_ERHJAHR between 2007 and 2010     --(Einschränkung des Kaufjahres) -->
+<!-- ``` -->
 
 <!-- ```{sql connection=statop, output.var = "t_gemeinde"} -->
 <!--  select gde_bfsnr, gde_name,raumplanreg_name,  bezirk_name from GEMEINDE -->
