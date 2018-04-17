@@ -297,6 +297,7 @@ tm_shape(ZHcarto) + tm_fill("med_preis", style="jenks") +
 
 Obtaining and processing house data. This code is for documentation purposes only. It cannot be executed unless the rights and access to the database are guaranteed.
 
+```{r,echo=F}
 # ```{r}
 # source("P:/db_connect.r")
 # ```
@@ -370,4 +371,5 @@ Obtaining and processing house data. This code is for documentation purposes onl
 # save(hex_geb_fake, file = "hex_geb_fake.RData")
 # save(hexbin_orig, file = "hexbin_orig.RData")
 # save(ZHshape, file = "ZHshape.RData")
-# ```
+# 
+```

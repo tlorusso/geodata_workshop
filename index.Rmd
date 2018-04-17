@@ -43,7 +43,7 @@ class: middle
 
 3. Plotting Simple Features
 
-https://tlorusso.github.io/sf_intro/sf_package.html
+https://tlorusso.github.io/geodata_workshop/sf_package
 
 ---
 class: middle
@@ -67,5 +67,11 @@ class: middle, inverse
 
 
 # tmap - thematic Maps in R
+
+https://github.com/mtennekes/tmap
+
+---
+
+
 
 
