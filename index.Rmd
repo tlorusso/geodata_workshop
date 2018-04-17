@@ -72,7 +72,6 @@ https://github.com/mtennekes/tmap
 
 https://tlorusso.github.io/geodata_workshop/tmap_package
 
----
 
 
 
