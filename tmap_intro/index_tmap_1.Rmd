@@ -293,83 +293,83 @@ tm_shape(ZHcarto) + tm_fill("med_preis", style="jenks") +
   tm_borders() + tm_layout(frame=F)
 ```
 
-# Apendix: The data-manipulation
+<!-- # Apendix: The data-manipulation -->
 
-Obtaining and processing house data. This code is for documentation purposes only. It cannot be executed unless the rights and access to the database are guaranteed.
+<!-- Obtaining and processing house data. This code is for documentation purposes only. It cannot be executed unless the rights and access to the database are guaranteed. -->
 
-```{r,echo=F}
-# ```{r}
-# source("P:/db_connect.r")
-# ```
-# 
-# 
-# ```{sql connection=statop, output.var = "ha_geb"}
-# select S_ID,	S_J_ERHJAHR,	BFS_AKT,	parznr, N_PREIS, CENTROID_X,	CENTROID_Y from HA_PROD.HA_HAUPTTAB_AS_MV a
-# join (select BFSNR, NUMMER, SHAPE_AREA, CENTROID_X, CENTROID_Y  from GEO.LIEGEN_GESAMT_TEMP_MV) d
-# on a.BFS_AKT = d.BFSNR AND a.parznr=d.nummer
-# where  c_artlieg = 7                           --(Wohngebäude))
-# 	and C_EFH = 1
-# 	and c_arthandae = 1                           --(Nur Kaufgeschäfte)
-# 	and S_J_ERHJAHR between 2007 and 2017       --(Einschränkung des Kaufjahres)
-# ```
-# 
-# 
-# ```{sql connection=statop, output.var = "t_gemeinde"}
-# select gde_bfsnr, gde_name,raumplanreg_name,  bezirk_name from GEMEINDE
-# where aktiv=1
-# ```
-# 
-# 
-# ```{r Datensatz aufbereiten}
-# source("L:/STAT/03_AS/01_Werkzeuge/01_Toolbox/R/Funktionen/my_sum.r")
-# 
-# names(t_gemeinde)<-tolower(names(t_gemeinde))
-# names(ha_geb)<- tolower(names(ha_geb))
-# 
-# ha_df <- ha_geb %>%
-#   mutate(typ="EFH")
-# 
-# my_sum(ha_df, n_preis, s_j_erhjahr)
-# ```
-# 
-# ```{r Vorbereitung Maps}
-# ZHshape <- rgdal::readOGR('L:/STAT/08_DS/03_GIS/Geodaten/Administrative_Grenzen/Gemeinden/Politische_Gemeinden_ZH/Shapes_Stände/Shape_generalisiert_2018/GEN_A4_GEMEINDEN_2018_F.shp')
-# 
-# swissgridneu<-CRS("+init=epsg:2056")
-# 
-# hexbin_orig <- rgdal::readOGR("L:/STAT/08_DS/03_GIS/Geodaten/Raster/Hexbin/Hexbin_0.5sqkm/Hexbin_05sqkm.shp")
-# proj4string(hexbin_orig) <- swissgridneu
-# hexbin_orig@data <- mutate(hexbin_orig@data, id_grid = as.numeric(rownames(hexbin_orig@data)))
-# hexbin_orig@data <- mutate(hexbin_orig@data, BFS=ifelse(as.numeric(as.character(BFS))==133, 295,
-#                                                         ifelse(as.numeric(as.character(BFS))==217, 294, as.numeric(as.character(BFS)))))
-# 
-# ha_geb<- ha_df %>%
-#   dplyr::filter(centroid_x>0 &  (typ=="EFH" & n_preis<5000000) )
-# 
-# coordinates(ha_geb)<-ha_geb[,c("centroid_x", "centroid_y")]
-# proj4string(ha_geb)<-swissgridneu
-# 
-# # Set a unique identifier for both of the data frames
-# #hexbin_orig@data <- mutate(hexbin_orig@data, id_grid = as.numeric(rownames(hexbin_orig@data)))
-# ha_geb@data <- mutate(ha_geb@data, id_ha_geb = as.numeric(rownames(ha_geb@data)))
-# 
-# # The houses get the value of the grid they are on top of
-# hex_geb <- over(ha_geb, hexbin_orig)
-# 
-# # the order didn't change so re add id_bus to the new table
-# hex_geb <- mutate(hex_geb, id_ha_geb = as.numeric(rownames(hex_geb)))
-# 
-# #Now join each original business to its grid location
-# hex_geb <- left_join(ha_geb@data, hex_geb, by = c("id_ha_geb" = "id_ha_geb"))
-# 
-# ha_data <- hex_geb %>% dplyr::select(-id_grid, -GRID_ID)
-# 
-# random=runif(length(hex_geb$id_grid),0,1) %>% as.data.frame() %>% dplyr::rename(random=".")
-# 
-# hex_geb_fake <- hex_geb %>%  bind_cols(random) %>%mutate(n_preis=n_preis*random) %>% dplyr::select(-random, -parznr, -id_ha_geb)
-# 
-# save(hex_geb_fake, file = "hex_geb_fake.RData")
-# save(hexbin_orig, file = "hexbin_orig.RData")
-# save(ZHshape, file = "ZHshape.RData")
-# 
-```
+<!-- ```{r} -->
+<!--  source("P:/db_connect.r") -->
+<!-- ``` -->
+
+
+<!-- ```{sql connection=statop, output.var = "ha_geb"} -->
+<!--  select S_ID,    S_J_ERHJAHR,    BFS_AKT,    parznr, N_PREIS, CENTROID_X,    CENTROID_Y from HA_PROD.HA_HAUPTTAB_AS_MV a -->
+<!--  join ( select BFSNR, gemeindefus_neu, COALESCE(gemeindefus_neu, BFSNR) AS BFS_neu, NUMMER, SHAPE_AREA, CENTROID_X, CENTROID_Y  from GEO.LIEGEN_GESAMT_TEMP_MV -->
+<!--      left join (select * from gemeindefus) -->
+<!--      on bfsnr = gemeindefus_alt) d -->
+<!--  on a.BFS_AKT = d.BFS_neu AND a.parznr=d.nummer -->
+<!--  where  c_artlieg = 7                           --(Wohngebäude)) -->
+<!--      and C_EFH = 1 -->
+<!--      and c_arthandae = 1                           --(Nur Kaufgeschäfte) -->
+<!--      and S_J_ERHJAHR between 2007 and 2017      --(Einschränkung des Kaufjahres) -->
+<!-- ``` -->
+
+
+<!-- ```{sql connection=statop, output.var = "t_gemeinde"} -->
+<!--  select gde_bfsnr, gde_name,raumplanreg_name,  bezirk_name from GEMEINDE -->
+<!--  where aktiv=1 -->
+<!-- ``` -->
+
+
+<!-- ```{r Datensatz aufbereiten} -->
+<!--  source("L:/STAT/03_AS/01_Werkzeuge/01_Toolbox/R/Funktionen/my_sum.r") -->
+
+<!--  names(t_gemeinde)<-tolower(names(t_gemeinde)) -->
+<!--  names(ha_geb)<- tolower(names(ha_geb)) -->
+
+<!--  ha_df <- ha_geb %>% -->
+<!--    mutate(typ="EFH") -->
+
+<!--  my_sum(ha_df, n_preis, s_j_erhjahr) -->
+<!-- ``` -->
+
+<!-- ```{r Vorbereitung Maps} -->
+<!--  ZHshape <- rgdal::readOGR('L:/STAT/08_DS/03_GIS/Geodaten/Administrative_Grenzen/Gemeinden/Politische_Gemeinden_ZH/Shapes_Stände/Shape_generalisiert_2018/GEN_A4_GEMEINDEN_2018_F.shp') -->
+
+<!--  swissgridneu<-CRS("+init=epsg:2056") -->
+
+<!--  hexbin_orig <- rgdal::readOGR("L:/STAT/08_DS/03_GIS/Geodaten/Raster/Hexbin/Hexbin_0.5sqkm/Hexbin_05sqkm.shp") -->
+<!--  proj4string(hexbin_orig) <- swissgridneu -->
+<!--  hexbin_orig@data <- mutate(hexbin_orig@data, id_grid = as.numeric(rownames(hexbin_orig@data))) -->
+<!--  hexbin_orig@data <- mutate(hexbin_orig@data, BFS=ifelse(as.numeric(as.character(BFS))==133, 295, -->
+<!--                                                          ifelse(as.numeric(as.character(BFS))==217, 294, as.numeric(as.character(BFS))))) -->
+
+<!--  ha_geb<- ha_df %>% -->
+<!--    dplyr::filter(centroid_x>0 &  (typ=="EFH" & n_preis<5000000) ) -->
+
+<!--  coordinates(ha_geb)<-ha_geb[,c("centroid_x", "centroid_y")] -->
+<!--  proj4string(ha_geb)<-swissgridneu -->
+
+<!--  # Set a unique identifier for both of the data frames -->
+<!--  #hexbin_orig@data <- mutate(hexbin_orig@data, id_grid = as.numeric(rownames(hexbin_orig@data))) -->
+<!--  ha_geb@data <- mutate(ha_geb@data, id_ha_geb = as.numeric(rownames(ha_geb@data))) -->
+
+<!-- # The houses get the value of the grid they are on top of -->
+<!-- hex_geb <- over(ha_geb, hexbin_orig) -->
+
+<!-- # the order didn't change so re add id_bus to the new table -->
+<!-- hex_geb <- mutate(hex_geb, id_ha_geb = as.numeric(rownames(hex_geb))) -->
+
+<!-- #Now join each original business to its grid location -->
+<!-- hex_geb <- left_join(ha_geb@data, hex_geb, by = c("id_ha_geb" = "id_ha_geb")) -->
+
+<!-- ha_data <- hex_geb %>% dplyr::select(-id_grid, -GRID_ID) -->
+
+<!-- random=runif(length(hex_geb$id_grid),0,1) %>% as.data.frame() %>% dplyr::rename(random=".") -->
+
+<!-- hex_geb_fake <- hex_geb %>%  bind_cols(random) %>%mutate(n_preis=n_preis*random) %>% dplyr::select(-random, -parznr, -id_ha_geb) -->
+
+<!-- save(hex_geb_fake, file = "hex_geb_fake.RData") -->
+<!-- save(hexbin_orig, file = "hexbin_orig.RData") -->
+<!-- save(ZHshape, file = "ZHshape.RData") -->
+<!-- ``` -->
